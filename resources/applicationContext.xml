@@ -23,15 +23,6 @@
 			<value>${password}</value>
 		</property>
 	</bean>
-	
-	<!-- <bean id="dataSource"
-		class="com.alibaba.druid.pool.DruidDataSource">
-		<property name="url" value="jdbc:mysql://120.78.207.252:3306/db_crawl"/>
-		<property name="username" value="root"/>
-		<property name="password">
-			<value>Mysql@123</value>
-		</property>
-	</bean> -->
  
     <!-- 配置mybatis的sqlSessionFactory -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
