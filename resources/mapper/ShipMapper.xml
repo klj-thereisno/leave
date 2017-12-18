@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fun.thereisno.dao.ShipDao" >
+
+	<resultMap type="ship" id="shipMap">
+		<id property="id" column="group_id_"/>
+		<!-- <collection property="users" column="user_id_"
+			select="fun.thereisno.dao.UserDao.getUserById">
+		</collection> -->
+	</resultMap>
+	
+	<select id="listById" resultMap="shipMap">
+		select * from act_id_membership where user_id_ = #{user_id_}
+	</select>
+
+</mapper>

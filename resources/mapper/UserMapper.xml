@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fun.thereisno.dao.UserDao" >
+
+	<resultMap type="user" id="userMap">
+		<id property="id" column="id_"/>
+		<result property="name" column="first_"/>
+		<result property="email" column="email_"/>
+		<collection property="ships" column="id_"
+			select="fun.thereisno.dao.ShipDao.listById">
+		</collection>
+	</resultMap>
+	
+	<select id="list" resultMap="userMap">
+		select * from act_id_user
+		<where>
+			<if test="user != null">
+				<if test="user.id != null">
+					id_ like "%"#{user.id}"%"
+				</if>
+				<if test="user.name != null">
+					and first_ like "%"#{user.name}"%"
+				</if>
+			</if>
+		</where>
+		<if test="pageBean != null">
+			limit #{pageBean.start}, #{pageBean.rows}
+		</if>
+	</select>
+	
+	<select id="count" resultType="int">
+		select count(*) from act_id_user
+		<where>
+			<if test="user != null">
+				<if test="user.id != null">
+					id_ like "%"#{user.id}"%"
+				</if>
+				<if test="user.name != null">
+					and first_ like "%"#{user.name}"%"
+				</if>
+			</if>
+		</where>
+	</select>
+	
+	<update id="update">
+		update act_id_user
+		<set>
+			first_ = #{firstName},
+			email_ = #{email},
+			<if test="password != ''">
+				pwd_ = #{password},
+			</if>
+		</set>
+		<where>
+			id_ = #{id}
+		</where>
+	</update>
+	
+	<delete id="delete">
+		delete from act_id_user
+		<where>
+			id_ in
+			<foreach collection="ids" item="id" open="(" separator="," close=")">
+				#{id}
+			</foreach>
+		</where>
+	</delete>
+</mapper>
