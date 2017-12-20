@@ -1,13 +1,9 @@
 package fun.thereisno.controller;
 
 import java.io.PrintWriter;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletRequest;
@@ -24,7 +20,6 @@ import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,7 +46,7 @@ public class UserController {
 	private UserService userService;
 	
 	@RequestMapping(value = "login", params = "group")
-	public void login(String group, UserEntity user, ServletResponse resp){ 
+	public synchronized void login(String group, UserEntity user, ServletResponse resp){ 
 		org.activiti.engine.identity.User result = null;
 		/**
 		 * 0 student
@@ -83,7 +78,7 @@ public class UserController {
 			if(result.getId().equals(user.getId())){ // nullpoint catch
 				Md5Hash hash = new Md5Hash(user.getPassword(), PropertiesUtil.getKey("salt"));
 				Subject subject = SecurityUtils.getSubject();
-				AuthenticationToken token = new UsernamePasswordToken(user.getId(), hash.toString());
+				AuthenticationToken token = new UsernamePasswordToken(user.getId() + "|" + group, hash.toString());
 				subject.login(token);
 				Session session = subject.getSession();
 				session.setAttribute("currentUser", result);
@@ -173,5 +168,18 @@ public class UserController {
 			msg = "{\"success\":false}";
 		}
 		out.print(msg);
+	}
+	
+	@PostMapping("author")
+	public void author(String roles, String id, PrintWriter out){
+		List<Group> groups = identityService.createGroupQuery().groupMember(id).list();
+		for (Group group : groups) 
+			identityService.deleteMembership(id, group.getId());
+		int i;
+		i = 3;
+		System.out.println(i / 0);
+		for(String role : roles.split(","))
+			identityService.createMembership(id, role);
+		out.print("{\"success\":true}");
 	}
 }
