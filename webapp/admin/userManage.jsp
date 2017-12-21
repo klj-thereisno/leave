@@ -68,6 +68,7 @@
 		$("#id").prop("readonly",true); // jsdianji
 		$("#fm").form("load",row);
 		$("[name=firstName]").val(row.name);
+		$("[name=firstName]").blur();
 	}
 	
 	function save(){
@@ -141,6 +142,7 @@
 		$("#groupList").empty();
 		$.ajax({
 			url:'../index/listGroup2',
+			async:false,
 			type:'post',
 			dataType:'json',
 			success:function(r){
@@ -149,22 +151,17 @@
 				}
 			}
 		});
-		setRoles(rows[0]);
+		var roles = rows[0].ships;
+		for(var id in roles){
+			$("[value=" + roles[id].id + "]:checkbox").attr("checked",true);
+		}
+		userId = rows[0].id;
 	}
 	
-	function setRoles(row){
-		var roles = row.ships;
-		for(var id in roles){
-			console.log(roles[id].id);
-			var role = roles[id]['id'];
-			console.log(role);
-			// $("[value=" + role + "]:checkbox").attr("checked",true);
-			$("[value="+role+"]:checkbox").attr("checked",true);
-		}
-	}
+	var userId = '';
 	
 	function saveAuthor(){
-		var groupArr = $("[name=groups]");
+		var groupArr = $("input[name=groups][type=checkbox]");
 		var roles = '';
 		for(var group in groupArr){
 			if(groupArr[group].checked){
@@ -174,7 +171,7 @@
 		$.ajax({
 			url:'../user/author',
 			type:'post',
-			data:{roles:roles},
+			data:{roles:roles,id:userId},
 			dataType:'json',
 			beforeSend:function(){
 				if(roles.length == 0){
@@ -184,10 +181,15 @@
 			},
 			success:function(r){
 				if(r.success){
+					$.messager.alert("提示","授权成功");
 					$("#dlg2").dialog("close");
-					$("#dg2").datagrid("reload");
+					$("#dg").datagrid("reload");
 				}else
 					$.messager.alert("提示","授权出错，请重试");
+			},
+			error:function(){
+				$.messager.alert("提示","服务器出错");
+				$("#dlg2").dialog("close");
 			}
 		});
 	}
@@ -210,7 +212,7 @@
 	<a href="javascript:void(0)" class="easyui-linkbutton" onclick="add()" plain="true" iconCls="icon-add">新增</a>
 	<a href="javascript:void(0)" class="easyui-linkbutton" onclick="edit()" plain="true" iconCls="icon-edit">编辑</a>
 	<a href="javascript:void(0)" class="easyui-linkbutton" onclick="deletes()" plain="true" iconCls="icon-remove">删除</a>
-	<a href="javascript:void(0)" class="easyui-linkbutton" onclick="author()" plain="true" iconCls="icon-power">授权</a>
+	<a href="javascript:void(0)" class="easyui-linkbutton" onclick="author()" plain="true" iconCls="icon-author">授权</a>
 	<br/>
 	&nbsp;用户名：<input id="s_id" onkeydown="if(event.keyCode == 13) search()">
 	&nbsp;&nbsp;&nbsp;姓名：<input id="s_name" onkeydown="if(event.keyCode == 13) search()">
@@ -222,7 +224,7 @@
 			<tr>
 				<td>用户名:</td>
 				<td><input id="id" name="id" class="easyui-validatebox" required="true" onblur="check(this.value)" ><span id="tip" style="color:red"></span></td>
-				<input id="flag" name="flag" value="false">
+				<input id="flag" name="flag" type="hidden" value="false">
 			</tr>
 			<tr>
 				<td>姓名:</td>
@@ -248,7 +250,7 @@
 	<a href="javascript:cancel()" class="easyui-linkbutton" iconCls="icon-cancel">取消</a>
 </div>
 
-<div id="dlg2" resizable="true" class="easyui-dialog" title="授权管理" buttons="#bt2" iconCls="icon-save" style="width:300px;height:155px" closed="true">
+<div id="dlg2" resizable="true" class="easyui-dialog" title="授权管理" buttons="#bt2" iconCls="icon-save" style="width:400px;height:155px" closed="true">
 	<div id="groupList" style="padding: 25px"></div>
 </div>
 <div id="bt2">

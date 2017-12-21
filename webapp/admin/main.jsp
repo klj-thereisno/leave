@@ -98,7 +98,33 @@
 		});
 	}
 	
-	// window.setInterval(show,1000);
+	function getCurrentDateTime(){
+		 var date=new Date();
+		 var year=date.getFullYear();
+		 var month=date.getMonth()+1;
+		 var day=date.getDate();
+		 var hours=date.getHours();
+		 var minutes=date.getMinutes();
+		 var seconds=date.getSeconds();
+		 return year+"-"+formatZero(month)+"-"+formatZero(day)+" "+formatZero(hours)+":"+formatZero(minutes)+":"+formatZero(seconds);
+	 }
+
+	function getCurrentDate(){
+		 var date=new Date();
+		 var year=date.getFullYear();
+		 var month=date.getMonth()+1;
+		 var day=date.getDate();
+		 return year+"-"+formatZero(month)+"-"+formatZero(day);
+	}
+
+
+	function formatZero(n){
+		if (n < 10)
+			n = "0" + n;
+		return n;
+	}
+	
+	window.setInterval(show,1000);
 	
 	function show(){
 		$("#time").text(getCurrentDateTime);
@@ -110,7 +136,7 @@
 		<table>
 			<tr>
 				<td><img style="width: 260px;height: 70px" src="../static/images/bg.jpg"></td>
-				<td><span style="font-size: 20px">欢迎：『${currentUser.id }』${currentUser.firstName }${currentUser.lastName }${group }</span></td>
+				<td><span style="font-size: 20px">欢迎：『${currentUser.id }』${currentUser.firstName }--${group }</span></td>
 				<td style="padding-left: 200px">现在时间：<span id="time"></span></td>
 			</tr>
 		</table>
@@ -127,25 +153,25 @@
 			<shiro:hasRole name="管理员">
 				<div title="基础数据管理" data-options="selected:true,iconCls:'icon-item'" style="padding: 10px">
 					<a href="javascript:openTab('userManage','用户管理','icon-user')" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-user'" style="width: 150px">用户管理</a>
-					<a href="javascript:openTab('groupManage','角色管理','icon-role')" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-role'" style="width: 150px">角色管理</a>
-					<a href="javascript:openTab('authorManage','用户权限管理','icon-power')" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-power'" style="width: 150px">用户权限管理</a>
 				</div>
 				<div title="流程管理"  data-options="iconCls:'icon-flow'" style="padding:10px;">
 					<a href="javascript:openTab('deployManage','流程部署管理','icon-deploy')" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-deploy'" style="width: 150px;">流程部署管理</a>
-					<a href="javascript:openTab('processDefinitionManage','流程定义管理','icon-definition')" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-definition'" style="width: 150px;">流程定义管理</a>
+					<a href="javascript:openTab('defineManage','流程定义管理','icon-definition')" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-definition'" style="width: 150px;">流程定义管理</a>
 				</div>
 			</shiro:hasRole>
+			<shiro:hasAnyRoles name="班长,教师,主任,院长">
 				<div title="任务管理" data-options="iconCls:'icon-task'" style="padding:10px">
-					<a href="javascript:openTab('daibanManage','待办任务管理','icon-daiban')" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-daiban'" style="width: 150px;">待办任务管理</a>
+					<a href="javascript:openTab('ready','待办任务管理','icon-daiban')" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-daiban'" style="width: 150px;">待办任务管理</a>
 					<a href="javascript:openTab('yibanManage','已办任务管理','icon-yiban')" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-yiban'" style="width: 150px;">已办任务管理</a>
 					<a href="javascript:openTab('lishiManage','历史任务管理','icon-lishi')" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-lishi'" style="width: 150px;">历史任务管理</a>
 				</div>
+			</shiro:hasAnyRoles>
 			<shiro:hasRole name="学生">
 				<div title="业务管理"  data-options="iconCls:'icon-yewu'" style="padding:10px">
-					<a href="javascript:openTab('leaveManage','请假申请','icon-apply')" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-apply'" style="width: 150px">请假申请</a>
+					<a href="javascript:openTab('leaveApply','请假申请','icon-apply')" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-apply'" style="width: 150px">请假申请</a>
 				</div>
 			</shiro:hasRole>
-			<div title="系统管理" selected="true"  data-options="iconCls:'icon-system'" style="padding:10px">
+			<div title="系统管理" data-options="iconCls:'icon-system'" style="padding:10px">
 				<a href="javascript:modifyPassword()" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-modifyPassword'" style="width: 150px;">修改密码</a>
 				<a href="javascript:logout()" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-exit'" style="width: 150px;">安全退出</a>
 			</div>

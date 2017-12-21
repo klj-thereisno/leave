@@ -104,7 +104,7 @@
 <div id="dlg" resizable="true" class="easyui-dialog" title="部署新增" buttons="#bt" iconCls="icon-save" style="width:300px;height:160px" closed="true">
 	<form id="fm" method="post" action="../deploy/svae" enctype="multipart/form-data" >
 		<div style="margin-bottom:20px;padding: 20px">
-            <input id="file" name="deployName" type="file" style="width:100%">
+            <input id="file" name="deployName" type="file" style="width:100%">(zip文件)
         </div>
 	</form>
 </div>
