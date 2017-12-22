@@ -5,10 +5,11 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>博客管理</title>
+<title>学生请假系统</title>
 <link rel="shortcut icon" href="${pageContext.request.contextPath}/static/images/favicon.ico" />
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/jquery-easyui-1.3.3/themes/default/easyui.css">
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/jquery-easyui-1.3.3/themes/icon.css">
+<link rel="shortcut icon" href="${pageContext.request.contextPath}/static/images/favicon.ico" />
 <script type="text/javascript" src="${pageContext.request.contextPath}/static/jquery-easyui-1.3.3/jquery.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/static/jquery-easyui-1.3.3/jquery.easyui.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/static/jquery-easyui-1.3.3/locale/easyui-lang-zh_CN.js"></script>
@@ -37,19 +38,19 @@
 			url:'../user/modify',
 			onSubmit:function(){
 				/* if($('[name=old]').val() == ''){
-					$.messager.alert("tip",'原密码不能为空','info');
+					$.messager.alert("提示",'原密码不能为空','info');
 					return false;
 				} */
 				if($('[name=password]').val() == ''){
-					$.messager.alert("tip",'新密码不能为空','info');
+					$.messager.alert("提示",'新密码不能为空','info');
 					return false;
 				}
 				if($('[name=password2]').val() == ''){
-					$.messager.alert("tip",'确认密码不能为空','info');
+					$.messager.alert("提示",'确认密码不能为空','info');
 					return false;
 				}
 				if($('[name=password2]').val() != $('[name=password]').val()){
-					$.messager.alert("tip",'确认密码与新密码不同，请重新填写','info');
+					$.messager.alert("提示",'确认密码与新密码不同，请重新填写','info');
 					return false;
 				}
 			},
@@ -135,7 +136,7 @@
 	<div region="north" style="height:80px;background-color:  #e0edef">
 		<table>
 			<tr>
-				<td><img style="width: 260px;height: 70px" src="../static/images/bg.jpg"></td>
+				<td><img style="height: 70px" src="../static/images/leave.png"></td>
 				<td><span style="font-size: 20px">欢迎：『${currentUser.id }』${currentUser.firstName }--${group }</span></td>
 				<td style="padding-left: 200px">现在时间：<span id="time"></span></td>
 			</tr>
@@ -162,8 +163,10 @@
 			<shiro:hasAnyRoles name="班长,教师,主任,院长">
 				<div title="任务管理" data-options="iconCls:'icon-task'" style="padding:10px">
 					<a href="javascript:openTab('ready','待办任务管理','icon-daiban')" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-daiban'" style="width: 150px;">待办任务管理</a>
-					<a href="javascript:openTab('yibanManage','已办任务管理','icon-yiban')" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-yiban'" style="width: 150px;">已办任务管理</a>
-					<a href="javascript:openTab('lishiManage','历史任务管理','icon-lishi')" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-lishi'" style="width: 150px;">历史任务管理</a>
+					<shiro:hasRole name="班长">
+					<a href="javascript:openTab('already','已办任务管理','icon-yiban')" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-yiban'" style="width: 150px;">已办任务管理</a>
+					</shiro:hasRole>
+					<a href="javascript:openTab('history','历史任务管理','icon-lishi')" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-lishi'" style="width: 150px;">历史任务管理</a>
 				</div>
 			</shiro:hasAnyRoles>
 			<shiro:hasRole name="学生">
@@ -181,7 +184,7 @@
 		<a href="http://www.miitbeian.gov.cn">皖ICP备17026886号</a>
 		Copyright © 2017-2017 thereisno.fun 版权所有
 	</div>
-	<div class="easyui-dialog" buttons="#bt" id="dlg" iconCls="icon-edit" title="修改密码" closed="true" closable="true" style="width:500px;height:300px">
+	<div class="easyui-dialog" buttons="#bt" id="dlg" iconCls="icon-edit" title="修改密码" closed="true" closable="true" style="width:300px;height:180px;padding: 10px">
 		<form id="fm" method="post">
 			<table>
 				<tr>

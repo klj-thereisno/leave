@@ -140,10 +140,10 @@
 	</thead>
 </table>
 <div id="tb">
-	<a href="javascript:void(0)" class="easyui-linkbutton" onclick="deal()" plain="true" iconCls="icon-edit">处理</a><br/>
+	<a href="javascript:void(0)" class="easyui-linkbutton" onclick="deal()" plain="true" iconCls="icon-check">审批</a><br/>
 	用户Id：<input id="s_id" onkeydown="if(event.keyCode == 13) search()"><a href="javascript:search()" class="easyui-linkbutton" plain="true" iconCls="icon-search">搜索</a>
 </div>
-<div id="dlg" class="easyui-dialog" modal="true" closed="true" iconCls="icon-search" title="请假详情" style="width:420px;height: 410px;padding: 6px">
+<div id="dlg" class="easyui-dialog" modal="true" closed="true" iconCls="icon-chakan" title="请假详情" style="width:420px;height: 410px;padding: 6px">
 	<table cellspacing="2px">
 		<form id="fm" method="post">
 			<tr>
