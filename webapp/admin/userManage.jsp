@@ -232,7 +232,7 @@
 			</tr>
 			<tr>
 				<td>邮箱:</td>
-				<td><input name="email" class="easyui-validatebox" required="true" ></td>
+				<td><input name="email" class="easyui-validatebox" required="true" validType="email"></td>
 			</tr>
 			<tr>
 				<td>密码:</td>

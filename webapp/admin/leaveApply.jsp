@@ -18,6 +18,23 @@
 		});
 	}
 	
+	function forHis(val, row){
+		if(val != '审核中')
+			return "<a href='javascript:show(" + row.instanceId +")'>查看详情</a>";
+	}
+	
+	function show(instanceId){
+		$("#dlg2").dialog("open");
+		$("#dg2").datagrid({
+			url:'../task/comment/list?instanceId=' + instanceId,
+			columns:[[
+			          {field:'userId',title:'审核人',width:100,align:'center'},
+			          {field:'message',title:'批注',width:100,align:'center'},
+			          {field:'time',title:'审核日期',width:100,align:'center'}
+			      ]]
+		});
+	}
+	
 	var exist = false;
 	
 	function forState(val, row){
@@ -89,7 +106,7 @@
 			<th data-options="field:'days',width:1" align="center">请假天数</th>
 			<th data-options="field:'reason',width:8" align="center">请假原因</th>
 			<th data-options="field:'state',width:2" align="center" formatter="forState">当前状态</th>
-			<th field="x" width="3" >详情查看</th>
+			<th field="x" width="3" formatter="forHis" align="center">详情</th>
 		</tr>
 	</thead>
 </table>
@@ -122,6 +139,10 @@
 <div id="bt">
 	<a href="javascript:void(0)" class="easyui-linkbutton" onclick="save()" iconCls="icon-ok">提交</a>
 	<a href="javascript:void(0)" class="easyui-linkbutton" onclick="cancel()" iconCls="icon-cancel">取消</a>
+</div>
+<div id="dlg2" class="easyui-dialog" title="历史批注" closed="true" iconCls="icon-save" style="width:420px;height: 160px;padding: 6px">
+	<table id="dg2" style="width: 390px;" fitColumns="true" rownumbers="true" class="easyui-datagrid">
+	</table>
 </div>
 </body>
 </html>
