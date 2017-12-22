@@ -48,6 +48,7 @@ public class UserController {
 	@RequestMapping(value = "login", params = "group")
 	public synchronized void login(String group, UserEntity user, ServletResponse resp){ 
 		org.activiti.engine.identity.User result = null;
+		
 		/**
 		 * 0 student
 		 * 1 monitor
@@ -175,9 +176,6 @@ public class UserController {
 		List<Group> groups = identityService.createGroupQuery().groupMember(id).list();
 		for (Group group : groups) 
 			identityService.deleteMembership(id, group.getId());
-		int i;
-		i = 3;
-		System.out.println(i / 0);
 		for(String role : roles.split(","))
 			identityService.createMembership(id, role);
 		out.print("{\"success\":true}");

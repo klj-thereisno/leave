@@ -28,7 +28,7 @@ public class IndexController {
 		List<Group> list = new ArrayList<Group>();
 		GroupEntity group = new GroupEntity("ÇëÑ¡Ôñ½ÇÉ«...");
 		list.add(group);
-		list.addAll(identityService.createGroupQuery().list());
+		list.addAll(identityService.createGroupQuery().orderByGroupType().asc().list());
 		// out.print(JSONArray.fromObject(list));
 		JsonConfig config = new JsonConfig();
 		config.setExcludes(new String[]{"name", "persistentState", "revisionNext", "revision"});
@@ -40,7 +40,7 @@ public class IndexController {
 	public void listGroup2(ServletResponse resp){
 		JsonConfig config = new JsonConfig();
 		config.setExcludes(new String[]{"name", "persistentState", "revisionNext", "revision"});
-		ResponseUtil.write(resp, JSONArray.fromObject(identityService.createGroupQuery().list(), config));
+		ResponseUtil.write(resp, JSONArray.fromObject(identityService.createGroupQuery().orderByGroupType().asc().list(), config));
 	}
 	
 }

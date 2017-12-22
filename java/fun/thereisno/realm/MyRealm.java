@@ -1,13 +1,10 @@
 package fun.thereisno.realm;
 
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
-import java.util.TreeSet;
-
 import javax.annotation.Resource;
 
 import org.activiti.engine.IdentityService;
-import org.activiti.engine.identity.Group;
 import org.activiti.engine.identity.User;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -24,22 +21,31 @@ public class MyRealm extends AuthorizingRealm{
 	@Resource
 	private IdentityService identityService;
 	
+	private String group;
+	
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 		SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-		Object principal = principals.getPrimaryPrincipal();
+		/*Object principal = principals.getPrimaryPrincipal();
 		List<Group> groups = identityService.createGroupQuery().groupMember(principal.toString()).list();
 		Set<String> roles = new TreeSet<String>();
 		for (Group group : groups) {
 			roles.add(group.getId());
 		}
-		info.setRoles(roles);
+		info.setRoles(roles);*/
+		/*
+		 * above can't resolve author identity only login so do this
+		 */
+		Set<String> set = new HashSet<String>();
+		set.add(group);
+		info.setRoles(set);
 		return info;
 	}
 
 	@Override
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-		String userName = (String) token.getPrincipal();
+		String userName = ((String) token.getPrincipal()).split("\\|")[0];
+		group = ((String) token.getPrincipal()).split("\\|")[1];
 		User user = identityService.createUserQuery().userId(userName).singleResult();
 		if(user != null){
 			SecurityUtils.getSubject().getSession().setAttribute("currentUser", user);
